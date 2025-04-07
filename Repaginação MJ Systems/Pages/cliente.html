@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depoimentos - MJ Systems</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --verde-primario: #396a33;
+            --azul-escuro: #162a42;
+            --azul-medio: #172d45;
+            --cinza-claro: #f5f7fa;
+            --cinza-medio: #e9ecef;
+            --cinza-texto: #6c757d;
+            --branco: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--azul-escuro);
+            line-height: 1.6;
+        }
+
+        .depoimentos-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--azul-escuro);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--verde-primario);
+        }
+
+        .section-subtitle {
+            color: var(--cinza-texto);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .depoimentos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .depoimento-card {
+            background: var(--branco);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--cinza-medio);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .depoimento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: rgba(57, 106, 51, 0.2);
+        }
+
+        .depoimento-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .cliente-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1.5rem;
+            border: 2px solid var(--verde-primario);
+        }
+
+        .cliente-info {
+            flex: 1;
+        }
+
+        .cliente-nome {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--azul-escuro);
+            margin-bottom: 0.3rem;
+        }
+
+        .cliente-cargo {
+            font-size: 0.9rem;
+            color: var(--cinza-texto);
+        }
+
+        .depoimento-texto {
+            flex: 1;
+            font-style: italic;
+            color: var(--azul-escuro);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .depoimento-texto::before {
+            content: '\201C';
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            font-size: 3rem;
+            color: var(--verde-primario);
+            opacity: 0.2;
+            line-height: 1;
+        }
+
+        .depoimento-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--cinza-medio);
+        }
+
+        .sistema-utilizado {
+            font-size: 0.9rem;
+        }
+
+        .sistema-utilizado strong {
+            color: var(--verde-primario);
+            font-weight: 600;
+        }
+
+        .avaliacao {
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+
+        .depoimento-data {
+            font-size: 0.8rem;
+            color: var(--cinza-texto);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--branco);
+            color: var(--verde-primario);
+            border: 1px solid var(--cinza-medio);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: var(--verde-primario);
+            color: var(--branco);
+            border-color: var(--verde-primario);
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--cinza-medio);
+            color: var(--cinza-texto);
+        }
+
+        @media (max-width: 768px) {
+            .depoimentos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .depoimento-card {
+                padding: 1.5rem;
+            }
+
+            .controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="depoimentos-section">
+        <div class="section-header">
+            <h2 class="section-title">Depoimentos</h2>
+            <p class="section-subtitle">Confira o que nossos clientes dizem sobre nossas soluções e serviços</p>
+        </div>
+
+        <div class="depoimentos-grid" id="depoimentosContainer">
+            <!-- Depoimento 1 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Cliente" class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Ricardo Almeida</h3>
+                        <p class="cliente-cargo">Diretor Industrial</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    A implementação do SIGO em nossa operação trouxe visibilidade completa dos processos. Conseguimos
+                    reduzir o tempo de inatividade em 35% e aumentar a produtividade em 28% no primeiro trimestre de
+                    uso.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>SIGO</strong></span>
+                    <span class="depoimento-data">Maio 2023</span>
+                </div>
+            </div>
+            <!-- Depoimento 2 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="Cliente" class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Fernanda Costa</h3>
+                        <p class="cliente-cargo">CFO</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    O FINANC revolucionou nosso controle financeiro. A integração com nossos sistemas existentes foi
+                    perfeita e os relatórios gerenciais nos deram insights valiosos para tomada de decisão estratégica.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>FINANC</strong></span>
+                    <span class="depoimento-data">Julho 2023</span>
+                </div>
+            </div>
+
+            <!-- Depoimento 3 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Cliente" class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Gustavo Mendes</h3>
+                        <p class="cliente-cargo">Gerente de Operações</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    O SGO atendeu perfeitamente às necessidades da nossa operação logística. A equipe da MJ Systems
+                    demonstrou profundo conhecimento do nosso negócio e entregou uma solução personalizada que superou
+                    expectativas.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>SGO</strong></span>
+                    <span class="depoimento-data">Setembro 2023</span>
+                </div>
+            </div>
+
+            <!-- Depoimento 4 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Patrícia Lima"
+                        class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Patrícia Lima</h3>
+                        <p class="cliente-cargo">Gerente de Qualidade</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    O módulo de Gestão da Qualidade do SIGO nos permitiu reduzir não conformidades em 42% no último ano.
+                    A rastreabilidade completa dos processos e os alertas automáticos transformaram nosso controle de
+                    qualidade.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>SIGO</strong></span>
+                    <span class="depoimento-data">Novembro 2023</span>
+                </div>
+            </div>
+
+            <!-- Depoimento 5 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Roberto Dias" class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Roberto Dias</h3>
+                        <p class="cliente-cargo">Supervisor de Manutenção</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    A manutenção preditiva do SIGO previnou 3 paradas não planejadas em nosso maquinário crítico apenas
+                    no primeiro mês de uso. O ROI foi imediato e a equipe da MJ Systems nos surpreendeu com o suporte
+                    especializado.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>SIGO</strong></span>
+                    <span class="depoimento-data">Janeiro 2024</span>
+                </div>
+            </div>
+
+            <!-- Depoimento 6 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Camila Nogueira"
+                        class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Camila Nogueira</h3>
+                        <p class="cliente-cargo">Diretora de Segurança</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    O SOP foi fundamental para nossa certificação ISO. A documentação automatizada e o controle
+                    operacional integrado reduziram em 60% o tempo que gastávamos com conformidade. Solução essencial
+                    para empresas do setor.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>SOP</strong></span>
+                    <span class="depoimento-data">Fevereiro 2024</span>
+                </div>
+            </div>
+
+            <!-- Depoimento 7 -->
+            <div class="depoimento-card">
+                <div class="depoimento-header">
+                    <img src="https://randomuser.me/api/portraits/men/55.jpg" alt="Leonardo Martins"
+                        class="cliente-avatar">
+                    <div class="cliente-info">
+                        <h3 class="cliente-nome">Leonardo Martins</h3>
+                        <p class="cliente-cargo">Controller Financeiro</p>
+                        <div class="avaliacao">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <p class="depoimento-texto">
+                    O FINANC nos proporcionou uma visão 360° das finanças com integração perfeita ao nosso ERP. O
+                    dashboard executivo é utilizado diretamente pela diretoria para tomada de decisão. Implementação
+                    rápida e sem traumas.
+                </p>
+                <div class="depoimento-footer">
+                    <span class="sistema-utilizado">Sistema: <strong>FINANC</strong></span>
+                    <span class="depoimento-data">Março 2024</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="control-btn" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Controle do carrossel (opcional para versão mobile)
+            const container = document.getElementById('depoimentosContainer');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const cards = Array.from(document.querySelectorAll('.depoimento-card'));
+            let currentIndex = 0;
+
+            // Mostrar apenas 3 cards por vez em desktop
+            function updateCards() {
+                cards.forEach((card, index) => {
+                    if (window.innerWidth > 768) {
+                        card.style.display = (index >= currentIndex && index < currentIndex + 3) ? 'flex' : 'none';
+                    } else {
+                        card.style.display = 'flex'; // Mostrar todos em mobile
+                    }
+                });
+
+                // Atualizar estado dos botões
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex >= cards.length - 3;
+            }
+
+            // Event listeners para os botões
+            prevBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCards();
+                }
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (currentIndex < cards.length - 3) {
+                    currentIndex++;
+                    updateCards();
+                }
+            });
+
+            // Inicializar e atualizar ao redimensionar
+            updateCards();
+            window.addEventListener('resize', updateCards);
+        });
+    </script>
+</body>
+
+</html>
