@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/adm.png">
+    <title>Cadastro de Empresas e Clientes</title>
+    <style>
+        /* CSS (com adições) */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        input[type="password"],
+        input[type="search"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button.danger {
+            background-color: #e74c3c;
+        }
+
+        button.danger:hover {
+            background-color: #c0392b;
+        }
+
+        button.success {
+            background-color: #2ecc71;
+        }
+
+        button.success:hover {
+            background-color: #27ae60;
+        }
+
+        .logo-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .empresa-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .empresa-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .empresa-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-right: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .empresa-info {
+            flex-grow: 1;
+        }
+
+        .clientes-list {
+            margin-top: 15px;
+        }
+
+        .cliente-item {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+
+        .actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #clientes-preview {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .cliente-preview-item {
+            background-color: #eaf2f8;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+
+        .success-message {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 15px;
+            right: 50px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-top: 0;
+        }
+
+        .login-container button {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-container input {
+            flex-grow: 1;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+
+        .backup-actions {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Tela de Login -->
+    <div id="login-container" class="login-container">
+        <h2>Acesso Restrito</h2>
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" placeholder="Digite a senha de acesso">
+        </div>
+        <button id="btn-login">Acessar</button>
+        <div id="login-error" class="error-message hidden">Senha incorreta. Tente novamente.</div>
+    </div>
+
+    <!-- Conteúdo Principal (inicialmente oculto) -->
+    <div id="main-content" class="hidden">
+        <div class="container">
+            <h1>Cadastro de Empresas e Clientes</h1>
+
+            <!-- Formulário de Cadastro de Empresa -->
+            <div id="empresa-form">
+                <h2 id="form-title">Nova Empresa</h2>
+                <div class="form-group">
+                    <label for="nome-empresa">Nome da Empresa:</label>
+                    <input type="text" id="nome-empresa" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contratante">Contratante:</label>
+                    <input type="text" id="contratante" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="logo-empresa">Logo da Empresa:</label>
+                    <input type="file" id="logo-empresa" accept="image/*">
+                    <img id="logo-preview" class="logo-preview hidden">
+                </div>
+
+                <div class="actions">
+                    <button id="salvar-empresa">Salvar Empresa</button>
+                    <button id="cancelar-edicao" class="danger hidden">Cancelar Edição</button>
+                </div>
+            </div>
+
+            <div id="success-message" class="success-message">
+                Empresa cadastrada com sucesso no site MJ Systems!
+            </div>
+
+            <!-- Formulário de Cliente (aparece após cadastrar empresa) -->
+            <div id="cliente-form" class="hidden">
+                <h2>Adicionar Cliente</h2>
+                <div class="form-group">
+                    <label for="nome-cliente">Nome do Cliente:</label>
+                    <input type="text" id="nome-cliente" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email-cliente">E-mail:</label>
+                    <input type="text" id="email-cliente">
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone-cliente">Telefone:</label>
+                    <input type="text" id="telefone-cliente">
+                </div>
+
+                <div class="actions">
+                    <button id="adicionar-cliente">Adicionar Cliente</button>
+                    <button id="finalizar-empresa">Finalizar Empresa</button>
+                    <button id="limpar-clientes" class="danger">Limpar Todos Clientes</button>
+                </div>
+
+                <!-- Visualização em tempo real dos clientes adicionados -->
+                <div id="clientes-preview" class="hidden">
+                    <h3>Clientes Adicionados</h3>
+                    <div id="clientes-preview-list"></div>
+                </div>
+            </div>
+
+            <!-- Backup e Exportação de Dados -->
+            <div class="backup-actions">
+                <h2>Backup e Exportação</h2>
+                <div class="actions">
+                    <button id="exportar-dados" class="success">Exportar Dados</button>
+                    <button id="importar-dados">Importar Dados</button>
+                    <input type="file" id="import-file" accept=".json" class="hidden">
+                </div>
+            </div>
+
+            <!-- Lista de Empresas Cadastradas -->
+            <div id="empresas-list">
+                <h2>Empresas Cadastradas</h2>
+
+                <!-- Barra de Busca -->
+                <div class="search-container">
+                    <input type="search" id="busca-empresas" placeholder="Buscar empresas...">
+                    <button id="limpar-busca">Limpar</button>
+                </div>
+
+                <div id="empresas-container"></div>
+                <div class="actions">
+                    <button id="limpar-tudo" class="danger">Limpar Todas as Empresas</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Elementos do Login
+            const loginContainer = document.getElementById('login-container');
+            const mainContent = document.getElementById('main-content');
+            const senhaInput = document.getElementById('senha');
+            const btnLogin = document.getElementById('btn-login');
+            const loginError = document.getElementById('login-error');
+
+            // Elementos do DOM
+            const empresaForm = document.getElementById('empresa-form');
+            const clienteForm = document.getElementById('cliente-form');
+            const empresasContainer = document.getElementById('empresas-container');
+            const clientesPreview = document.getElementById('clientes-preview');
+            const clientesPreviewList = document.getElementById('clientes-preview-list');
+            const successMessage = document.getElementById('success-message');
+            const limparClientesBtn = document.getElementById('limpar-clientes');
+            const limparTudoBtn = document.getElementById('limpar-tudo');
+            const formTitle = document.getElementById('form-title');
+            const cancelarEdicaoBtn = document.getElementById('cancelar-edicao');
+
+            // Elementos de busca
+            const buscaInput = document.getElementById('busca-empresas');
+            const limparBuscaBtn = document.getElementById('limpar-busca');
+
+            // Elementos de backup
+            const exportarDadosBtn = document.getElementById('exportar-dados');
+            const importarDadosBtn = document.getElementById('importar-dados');
+            const importFileInput = document.getElementById('import-file');
+
+            // Inputs
+            const nomeEmpresaInput = document.getElementById('nome-empresa');
+            const contratanteInput = document.getElementById('contratante');
+            const logoEmpresaInput = document.getElementById('logo-empresa');
+            const logoPreview = document.getElementById('logo-preview');
+            const nomeClienteInput = document.getElementById('nome-cliente');
+            const emailClienteInput = document.getElementById('email-cliente');
+            const telefoneClienteInput = document.getElementById('telefone-cliente');
+
+            // Botões
+            const salvarEmpresaBtn = document.getElementById('salvar-empresa');
+            const adicionarClienteBtn = document.getElementById('adicionar-cliente');
+            const finalizarEmpresaBtn = document.getElementById('finalizar-empresa');
+
+            // Variáveis de estado
+            let empresas = JSON.parse(localStorage.getItem('mjSystemsClients')) || [];
+            let currentEmpresa = null;
+            let currentClientes = [];
+            let editMode = false;
+            let empresaEmEdicaoId = null;
+
+            // Senha de acesso
+            const SENHA_CORRETA = "mj";
+
+            // Verificar login
+            btnLogin.addEventListener('click', function () {
+                const senhaDigitada = senhaInput.value.trim();
+
+                if (senhaDigitada === SENHA_CORRETA) {
+                    loginContainer.classList.add('hidden');
+                    mainContent.classList.remove('hidden');
+                    loadData();
+                } else {
+                    loginError.classList.remove('hidden');
+                    senhaInput.value = '';
+                    senhaInput.focus();
+                }
+            });
+
+            // Permitir login com Enter
+            senhaInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    btnLogin.click();
+                }
+            });
+
+            // Carregar dados ao iniciar
+            function loadData() {
+                const savedData = localStorage.getItem('mjSystemsClients');
+                if (savedData) {
+                    empresas = JSON.parse(savedData);
+                    renderEmpresas();
+                }
+            }
+
+            // Preview do logo
+            logoEmpresaInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        logoPreview.src = event.target.result;
+                        logoPreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Salvar empresa (criação ou edição)
+            salvarEmpresaBtn.addEventListener('click', function () {
+                const nomeEmpresa = nomeEmpresaInput.value.trim();
+                const contratante = contratanteInput.value.trim();
+
+                if (!nomeEmpresa || !contratante) {
+                    alert('Por favor, preencha todos os campos obrigatórios da empresa.');
+                    return;
+                }
+
+                if (editMode) {
+                    // Modo edição - atualizar empresa existente
+                    const empresaIndex = empresas.findIndex(e => e.id === empresaEmEdicaoId);
+                    if (empresaIndex !== -1) {
+                        empresas[empresaIndex] = {
+                            ...empresas[empresaIndex],
+                            nome: nomeEmpresa,
+                            contratante: contratante,
+                            logo: logoPreview.src || empresas[empresaIndex].logo
+                        };
+                        saveData();
+                        showSuccess(`Empresa "${nomeEmpresa}" atualizada com sucesso!`);
+                        resetForm();
+                        renderEmpresas();
+                    }
+                } else {
+                    // Modo criação - nova empresa
+                    currentEmpresa = {
+                        id: Date.now().toString(),
+                        nome: nomeEmpresa,
+                        contratante: contratante,
+                        logo: logoPreview.src || '',
+                        clientes: []
+                    };
+
+                    // Limpar formulário
+                    nomeEmpresaInput.value = '';
+                    contratanteInput.value = '';
+                    logoEmpresaInput.value = '';
+                    logoPreview.src = '';
+                    logoPreview.classList.add('hidden');
+
+                    // Mostrar formulário de cliente
+                    empresaForm.classList.add('hidden');
+                    clienteForm.classList.remove('hidden');
+                    nomeClienteInput.focus();
+                }
+            });
+
+            // Adicionar cliente
+            adicionarClienteBtn.addEventListener('click', function () {
+                const nomeCliente = nomeClienteInput.value.trim();
+                const emailCliente = emailClienteInput.value.trim();
+                const telefoneCliente = telefoneClienteInput.value.trim();
+
+                if (!nomeCliente) {
+                    alert('Por favor, informe pelo menos o nome do cliente.');
+                    return;
+                }
+
+                const novoCliente = {
+                    nome: nomeCliente,
+                    email: emailCliente,
+                    telefone: telefoneCliente
+                };
+
+                currentClientes.push(novoCliente);
+                updateClientesPreview();
+
+                // Limpar formulário
+                nomeClienteInput.value = '';
+                emailClienteInput.value = '';
+                telefoneClienteInput.value = '';
+                nomeClienteInput.focus();
+            });
+
+            // Atualizar visualização em tempo real
+            function updateClientesPreview() {
+                if (currentClientes.length === 0) {
+                    clientesPreview.classList.add('hidden');
+                    return;
+                }
+
+                clientesPreview.classList.remove('hidden');
+                clientesPreviewList.innerHTML = currentClientes.map((cliente, index) => `
+                    <div class="cliente-preview-item">
+                        <p><strong>${index + 1}.</strong> ${cliente.nome}
+                        ${cliente.email ? ` | ${cliente.email}` : ''}
+                        ${cliente.telefone ? ` | ${cliente.telefone}` : ''}</p>
+                    </div>
+                `).join('');
+            }
+
+            // Finalizar cadastro
+            finalizarEmpresaBtn.addEventListener('click', function () {
+                if (currentClientes.length === 0 && !confirm('Nenhum cliente foi adicionado. Deseja continuar?')) {
+                    return;
+                }
+
+                currentEmpresa.clientes = [...currentClientes];
+                empresas.push(currentEmpresa);
+                saveData();
+
+                // Feedback
+                showSuccess(`${currentEmpresa.nome} cadastrada com sucesso!`);
+
+                // Resetar
+                resetForm();
+                renderEmpresas();
+            });
+
+            // Limpar clientes atuais
+            limparClientesBtn.addEventListener('click', function () {
+                if (currentClientes.length === 0 || confirm('Tem certeza que deseja limpar todos os clientes adicionados?')) {
+                    currentClientes = [];
+                    updateClientesPreview();
+                }
+            });
+
+            // Limpar todas as empresas
+            limparTudoBtn.addEventListener('click', function () {
+                if (empresas.length === 0 || confirm('Tem certeza que deseja apagar TODAS as empresas cadastradas?')) {
+                    localStorage.removeItem('mjSystemsClients');
+                    empresas = [];
+                    renderEmpresas();
+                }
+            });
+
+            // Função para editar empresa
+            function editarEmpresa(id) {
+                const empresa = empresas.find(e => e.id === id);
+                if (!empresa) return;
+
+                // Entrar em modo edição
+                editMode = true;
+                empresaEmEdicaoId = id;
+                formTitle.textContent = 'Editar Empresa';
+                cancelarEdicaoBtn.classList.remove('hidden');
+
+                // Preencher formulário com dados da empresa
+                nomeEmpresaInput.value = empresa.nome;
+                contratanteInput.value = empresa.contratante;
+                if (empresa.logo) {
+                    logoPreview.src = empresa.logo;
+                    logoPreview.classList.remove('hidden');
+                }
+
+                // Esconder lista de empresas e mostrar formulário
+                document.getElementById('empresas-list').classList.add('hidden');
+                empresaForm.classList.remove('hidden');
+                nomeEmpresaInput.focus();
+            }
+
+            // Cancelar edição
+            cancelarEdicaoBtn.addEventListener('click', function () {
+                resetForm();
+                document.getElementById('empresas-list').classList.remove('hidden');
+            });
+
+            // Busca de empresas
+            buscaInput.addEventListener('input', function () {
+                const termo = this.value.trim().toLowerCase();
+                if (termo === '') {
+                    renderEmpresas();
+                    return;
+                }
+
+                const resultados = empresas.filter(empresa =>
+                    empresa.nome.toLowerCase().includes(termo) ||
+                    empresa.contratante.toLowerCase().includes(termo) ||
+                    empresa.clientes.some(cliente => cliente.nome.toLowerCase().includes(termo)));
+
+
+                renderEmpresas(resultados);
+            });
+
+            // Limpar busca
+            limparBuscaBtn.addEventListener('click', function () {
+                buscaInput.value = '';
+                renderEmpresas();
+            });
+
+            // Exportar dados
+            exportarDadosBtn.addEventListener('click', function () {
+                const dataStr = JSON.stringify(empresas, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+                const exportFileDefaultName = `backup-clientes-mjsystems-${new Date().toISOString().split('T')[0]}.json`;
+
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+
+                showSuccess('Dados exportados com sucesso!');
+            });
+
+            // Importar dados
+            importarDadosBtn.addEventListener('click', function () {
+                importFileInput.click();
+            });
+
+            importFileInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    try {
+                        const dados = JSON.parse(event.target.result);
+                        if (confirm(`Deseja importar ${dados.length} empresas? Isso substituirá os dados atuais.`)) {
+                            empresas = dados;
+                            saveData();
+                            renderEmpresas();
+                            showSuccess('Dados importados com sucesso!');
+                        }
+                    } catch (error) {
+                        alert('Erro ao ler arquivo. Certifique-se de que é um JSON válido.');
+                        console.error(error);
+                    }
+                    e.target.value = ''; // Limpa o input para permitir nova seleção do mesmo arquivo
+                };
+                reader.readAsText(file);
+            });
+
+            // Funções auxiliares
+            function saveData() {
+                localStorage.setItem('mjSystemsClients', JSON.stringify(empresas));
+                // Dispara evento para atualizar o site principal
+                window.dispatchEvent(new Event('storage'));
+            }
+
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                setTimeout(() => successMessage.style.display = 'none', 5000);
+            }
+
+            function resetForm() {
+                editMode = false;
+                empresaEmEdicaoId = null;
+                currentEmpresa = null;
+                currentClientes = [];
+                clientesPreview.classList.add('hidden');
+                clientesPreviewList.innerHTML = '';
+                clienteForm.classList.add('hidden');
+                empresaForm.classList.remove('hidden');
+                formTitle.textContent = 'Nova Empresa';
+                cancelarEdicaoBtn.classList.add('hidden');
+
+                // Limpar inputs
+                nomeEmpresaInput.value = '';
+                contratanteInput.value = '';
+                logoEmpresaInput.value = '';
+                logoPreview.src = '';
+                logoPreview.classList.add('hidden');
+            }
+
+            // Renderizar empresas (com suporte a filtro)
+            function renderEmpresas(empresasParaRenderizar = empresas) {
+                if (empresasParaRenderizar.length === 0) {
+                    empresasContainer.innerHTML = '<div class="no-results">Nenhuma empresa encontrada</div>';
+                    return;
+                }
+
+                empresasContainer.innerHTML = empresasParaRenderizar.map(empresa => `
+                    <div class="empresa-card" data-id="${empresa.id}">
+                        <button class="delete-btn" data-id="${empresa.id}" title="Excluir empresa">×</button>
+                        <button class="edit-btn" data-id="${empresa.id}" title="Editar empresa">✎</button>
+                        <div class="empresa-header">
+                            ${empresa.logo ? `<img src="${empresa.logo}" alt="Logo ${empresa.nome}" class="empresa-logo">` : ''}
+                            <div class="empresa-info">
+                                <h3>${empresa.nome}</h3>
+                                <p><strong>Contratante:</strong> ${empresa.contratante}</p>
+                            </div>
+                        </div>
+                        <div class="clientes-list">
+                            <h3>Clientes (${empresa.clientes.length})</h3>
+                            ${empresa.clientes.length > 0
+                        ? empresa.clientes.map(cliente => `
+                                        <div class="cliente-item">
+                                            <p><strong>Nome:</strong> ${cliente.nome}</p>
+                                            ${cliente.email ? `<p><strong>E-mail:</strong> ${cliente.email}</p>` : ''}
+                                            ${cliente.telefone ? `<p><strong>Telefone:</strong> ${cliente.telefone}</p>` : ''}
+                                        </div>
+                                    `).join('')
+                        : '<p>Nenhum cliente cadastrado</p>'
+                    }
+                        </div>
+                    </div>
+                `).join('');
+
+                // Adicionar eventos aos botões de deletar
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        if (confirm('Tem certeza que deseja excluir esta empresa?')) {
+                            empresas = empresas.filter(e => e.id !== id);
+                            saveData();
+                            renderEmpresas();
+                        }
+                    });
+                });
+
+                // Adicionar eventos aos botões de editar
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        editarEmpresa(id);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
